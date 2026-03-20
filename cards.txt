@@ -1,0 +1,44 @@
+
+        <div className='bg-black flex flex-wrap items-center justify-center gap-3 w-40 h-40 p-5 rounded-2xl hover:bg-[#4a5759] duration-300'>
+          <div className='flex items-center justify-center gap-3 w-30 h-20 border-b-2 border-white'>
+            <ShoppingBagIcon className='w-12 h-12 text-white' />
+            <h1 className='text-white'>Products</h1>
+          </div>
+          <div className='w-full text-center'>
+            <p className='text-white'>{products.length}</p>
+          </div>
+        </div> 
+
+        <div className='bg-[#780000] flex flex-wrap items-center justify-center gap-3 w-40 h-40 p-5 rounded-2xl hover:bg-[#c1121f] duration-300'>
+          <div className='flex items-center justify-center gap-3 w-30 h-20 border-b-2 border-white'>
+            <UsersIcon className='w-12 h-12 text-white' />
+            <h1 className='text-white'>Users</h1>
+          </div>
+          <div className='w-full text-center'>
+            <p className='text-white'>{users.length}</p>
+          </div>
+        </div>
+        
+        
+
+        <div className='bg-[#335c67] flex flex-wrap items-center justify-center gap-3 w-40 h-40 p-5 rounded-2xl hover:bg-[#457b9d] duration-300'>
+          <div className='flex items-center justify-center gap-3 w-30 h-20 border-b-2 border-white'>
+            <ShoppingCartIcon className='w-12 h-12 text-white' />
+            <h1 className='text-white'>Carts</h1>
+          </div>
+          <div className='w-full text-center'>
+            <p className='text-white'>{carts.length}</p>
+          </div>
+        </div>
+        
+        
+        <div className='bg-[#31572c] flex flex-wrap items-center justify-center gap-3 w-40 h-40 p-5 rounded-2xl hover:bg-[#4f772d] duration-300'>
+          <div className='flex items-center justify-center gap-3 w-30 h-20 border-b-2 border-white'>
+            <ChatBubbleOvalLeftEllipsisIcon className='w-12 h-12 text-white' />
+            <h1 className='text-white'>Posts</h1>
+          </div>
+          <div className='w-full text-center'>
+            <p className='text-white'>{posts.length}</p>
+          </div>
+        </div>
+        
