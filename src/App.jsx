@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Legend, Sector } from 'recharts'
-import { exportProducts, exportUsers, exportPost } from './services/api'
-import { ShoppingBagIcon, UsersIcon, UserIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/16/solid'
+import { exportProducts, exportUsers, exportPost, exportCarts } from './services/api'
+import { ShoppingBagIcon, ShoppingCartIcon, UserIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/16/solid'
 import Card from './components/Card'
+import { COLORS } from './Colors'
+import Navbar from './components/Navbar'
 
 function App() {
   const [products, setProducts] = useState([])
   const [users, setUsers] = useState([])
-  // const [carts, setCarts] = useState([])
+  const [carts, setCarts] = useState([])
   const [posts, setPost] = useState([])
   const [activeFilter, setActiveFilter] = useState(null)
   const [activeIndex, setActiveIndex] = useState(0)
-
-  const COLORS = ['#ff6b6b', '#4d96ff', '#6bcB77', '#ffd93d', '#845ec2', '#00c9a7']
 
   const renderActiveShape = (props) => {
     const {
@@ -50,7 +50,25 @@ function App() {
 
     return Object.keys(result).map((key, index) => ({
       name: key,
-      title: "Products",
+      title: "Quantity Products By Category",
+      total: result[key],
+      fill: COLORS[index % COLORS.length]
+    }))
+  }
+
+  let totalProducts = carts.reduce((acc, value) => acc += value.products.length , 0);
+
+  const getQuantityOfProducts = () => {
+    const result = carts.reduce((acc, value) => {
+      if (!acc[value.userId]) {
+        acc[value.userId] = value.products.length
+      }
+      return acc;
+    }, {})
+
+    return Object.keys(result).map((key, index) => ({
+      name: `${key}`,
+      title: "Quantity Of Products By User",
       total: result[key],
       fill: COLORS[index % COLORS.length]
     }))
@@ -74,25 +92,54 @@ function App() {
 
     return Object.keys(result).map((key, index) => ({
       name: key,
-      title: "Ages",
+      title: "Ages By Users",
       total: result[key],
       fill: COLORS[index % COLORS.length]
     }))
   }
 
-  const getUsersByCountry = () => {
-    const result = users.reduce((acc, value) => {
-      let genero = value.gender
-      if (!acc[genero]) {
-        acc[genero] = 0
-      } 
-      acc[genero] += 1;
+  const getRoleByReactions = () => {
+    const result = posts.reduce((acc, value) => {
+      let reacciones = value.reactions;
+      let total = 0;
+      Object.values(reacciones).forEach((num) => {
+        total += num
+      })
+
+      if (total >= 0 && total <= 100) {
+        acc["0-100"] += 1
+      } else if (total >= 101 && total <= 200) {
+        acc["101-200"] += 1
+      } else if (total >= 201 && total <= 300) {
+        acc["201-300"] += 1
+      } else if (total >= 301 && total <= 400) {
+        acc["301-400"] += 1
+      } else if (total >= 401 && total <= 500) {
+        acc["401-500"] += 1
+      } else if (total >= 501 && total <= 700) {
+        acc["501-700"] += 1
+      } else if (total >= 701 && total <= 1000) {
+        acc["701-1000"] += 1
+      } else if (total >= 1000) {
+        acc["1000+"] += 1
+      }
+
       return acc;
-    }, {})
+    },
+      {
+        "0-100": 0,
+        "101-200": 0,
+        "201-300": 0,
+        "301-400": 0,
+        "401-500": 0,
+        "501-700": 0,
+        "701-1000": 0,
+        "1000+": 0,
+      })
 
     return Object.keys(result).map((key, index) => ({
       name: key,
-      title: "Gender",
+      title: "Quantity of Reaction by Posts",
       total: result[key],
       fill: COLORS[index % COLORS.length]
     }))
@@ -103,27 +150,36 @@ function App() {
     chartData = getProductsByCategory();
   } else if (activeFilter === 'users') {
     chartData = getUsersByAge();
-  } else if (activeFilter === 'country') {
-    chartData = getUsersByCountry();
+  } else if (activeFilter === 'posts') {
+    chartData = getRoleByReactions();
+  } else if (activeFilter === 'carts') {
+    chartData = getQuantityOfProducts();
   }
 
+  // Obtener titulo
+  // const [obj] = chartData;
+  const obj = chartData[0]
 
   useEffect(() => {
     const getProducts = async () => {
       const prod = await exportProducts();
       const user = await exportUsers();
-      // const cart = await exportCarts();
+      const cart = await exportCarts();
       const post = await exportPost();
       setProducts(prod);
       setUsers(user);
-      // setCarts(cart)
+      setCarts(cart)
       setPost(post)
     }
     getProducts();
   }, [])
 
+  // console.log(chartData);
+
   return (
     <>
+    <div className='min-h-screen flex'>
+      <Navbar />
       <div className='min-h-screen p-8'>
         <div className='bg-[#1d3557] p-8 flex items-center justify-center gap-10 mb-10 rounded-2xl'>
           <Card
@@ -137,7 +193,7 @@ function App() {
           />
 
           <Card
-            titulo="Age Users"
+            titulo="Age by Users"
             valor={users.length}
             Icon={UserIcon}
             color='bg-[#780000]'
@@ -147,29 +203,30 @@ function App() {
           />
 
           <Card
-            titulo="Gender Users"
-            valor={users.length}
-            Icon={UsersIcon}
+            titulo="Reactions Posts"
+            valor={posts.length}
+            Icon={ChatBubbleOvalLeftEllipsisIcon}
             color='bg-[#335c67]'
             hover='hover:bg-[#457b9d]'
-            filter='country'
+            filter='posts'
             onClick={setActiveFilter}
           />
 
           <Card
-            titulo="Posts"
-            valor={posts.length}
-            Icon={ChatBubbleOvalLeftEllipsisIcon}
+            titulo="Quantity of Products"
+            valor={totalProducts}
+            Icon={ShoppingCartIcon}
             color='bg-[#31572c]'
             hover='hover:bg-[#4f772d]'
-            filter='posts'
+            filter='carts'
             onClick={setActiveFilter}
           />
+
         </div>
         {chartData.length > 0 && (
           <div className='bg-white p-6 flex justify-center items-center gap-8 flex-wrap border rounded-2xl'>
             <div>
-              <h2 className='text-center mb-4 font-bold'>Bar Graph</h2>
+              <h2 className='text-center mb-4 font-bold'>Bar Graph {obj.title}</h2>
               <BarChart
                 className='border p-2 rounded-2xl'
                 width={700} height={350} data={chartData}>
@@ -181,7 +238,7 @@ function App() {
               </BarChart>
             </div>
             <div>
-              <h2 className='text-center mb-4 font-bold'>Pie Graph</h2>
+              <h2 className='text-center mb-4 font-bold'>Pie Graph {obj.title}</h2>
               <PieChart
                 className='border p-2 rounded-2xl'
                 width={400} height={400}>
@@ -206,6 +263,7 @@ function App() {
         )}
 
       </div>
+    </div>
     </>
   )
 }
