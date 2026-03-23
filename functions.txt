@@ -1,0 +1,61 @@
+/* const getUsersByGender = () => {
+    const result = users.reduce((acc, value) => {
+      let genero = value.gender
+      if (!acc[genero]) {
+        acc[genero] = 0
+      }
+      acc[genero] += 1;
+      return acc;
+    }, {})
+
+    return Object.keys(result).map((key, index) => ({
+      name: key,
+      title: "Gender",
+      total: result[key],
+      fill: COLORS[index % COLORS.length]
+    }))
+  }
+
+  const getUsersByRole = () => {
+    const result = users.reduce((acc, value) => {
+      let rol = value.role
+      if (!acc[rol]) {
+        acc[rol] = 0
+      }
+      acc[rol] += 1;
+      return acc;
+    }, {})
+
+    return Object.keys(result).map((key, index) => ({
+      name: key,
+      title: "Role Users",
+      total: result[key],
+      fill: COLORS[index % COLORS.length]
+    }))
+  } */
+
+  /* else if (activeFilter === 'gender') {
+    chartData = getUsersByGender();
+  } else if (activeFilter === 'roleUsers') {
+    chartData = getUsersByRole(); 
+  }*/
+
+            {/* <Card
+            titulo="Gender Users"
+            valor={users.length}
+            Icon={UsersIcon}
+            color='bg-[#335c67]'
+            hover='hover:bg-[#457b9d]'
+            filter='gender'
+            onClick={setActiveFilter}
+          />
+
+          <Card
+            titulo="Role Users"
+            valor={users.length}
+            Icon={ChatBubbleOvalLeftEllipsisIcon}
+            color='bg-[#31572c]'
+            hover='hover:bg-[#4f772d]'
+            filter='roleUsers'
+            onClick={setActiveFilter}
+          /> */}
