@@ -1,4 +1,4 @@
-import { MagnifyingGlassCircleIcon, EyeIcon, TrashIcon, ArrowRightCircleIcon, ArrowLeftCircleIcon } from "@heroicons/react/16/solid"
+import { EyeIcon, TrashIcon, ArrowRightCircleIcon, ArrowLeftCircleIcon } from "@heroicons/react/16/solid"
 import { useState } from "react"
 
 function Table({ products }) {
@@ -22,13 +22,19 @@ function Table({ products }) {
     const totalPaginas = Math.ceil(filtro.length / registroPorPagina)
     const registrosMostrados = filtro.slice(inicio, fin)
 
+    const handleBuscar = (e) => {
+        const input = e.target.value;
+        const result = input.replace(/[^a-zA-Záéíóú123456789]/g, '')
+        setInputFiltro(result)
+    }
+
     return (
         <div className='w-full p-6'>
             <div className='w-full p-6 grid grid-cols-4 gap-2 place-items-center border rounded-2xl bg-[#1d3557]'>
                 <div className=''>
                     <input
                         value={inputFiltro}
-                        onChange={(e) => setInputFiltro(e.target.value)}
+                        onChange={handleBuscar}
                         className='border border-black text-center rounded-xl bg-[#31572c] p-2 text-white'
                         type="text" placeholder='Search' />
                 </div>
