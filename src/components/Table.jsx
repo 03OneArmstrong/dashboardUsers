@@ -4,6 +4,7 @@ import { useState } from "react"
 function Table({ products }) {
 
     const [inputFiltro, setInputFiltro] = useState('')
+    const [filtroEstado, setFiltroEstado] = useState('null')
 
     const filtro = products.filter((obj) => {
         const valorCoincide =
@@ -12,7 +13,11 @@ function Table({ products }) {
             obj?.price.toString().includes(inputFiltro) ||
             obj?.stock.toString().includes(inputFiltro)
 
-        return valorCoincide
+        const coincideCategoria = filtroEstado === 'null' 
+        ? true
+        : obj.category === filtroEstado    
+
+        return valorCoincide && coincideCategoria
     })
 
     const [paginaActual, setPaginaActual] = useState(1);
@@ -39,12 +44,15 @@ function Table({ products }) {
                         type="text" placeholder='Search' />
                 </div>
                 <div>
-                    <select className='border border-black bg-[#780000] text-white p-2 rounded-2xl text-center w-40'>
-                        <option value="">All</option>
-                        <option value="">Beauty</option>
-                        <option value="">Fragrances</option>
-                        <option value="">Furniture</option>
-                        <option value="">Groceries</option>
+                    <select 
+                    value={filtroEstado}
+                    onChange={(e) => setFiltroEstado(e.target.value)}
+                    className='border border-black bg-[#780000] text-white p-2 rounded-2xl text-center w-40'>
+                        <option value="null">All</option>
+                        <option value="beauty">Beauty</option>
+                        <option value="fragrances">Fragrances</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="groceries">Groceries</option>
                     </select>
                 </div>
             </div>
@@ -91,7 +99,7 @@ function Table({ products }) {
                     <button
                         onClick={() => setPaginaActual(p => p + 1)}
                         disabled={paginaActual === totalPaginas}
-                        className={`rounded-full text-[#8cb369] duration-300 ${paginaActual === totalPaginas ?'bg-[#495057] cursor-not-allowed' : 'bg-white cursor-pointer hover:text-[#023047]' }`}>
+                        className={`rounded-full text-[#8cb369] duration-300 ${paginaActual === totalPaginas ? 'bg-[#495057] cursor-not-allowed' : 'bg-white cursor-pointer hover:text-[#023047]'}`}>
                         <ArrowRightCircleIcon className="w-12 h-12" />
                     </button>
                 </div>

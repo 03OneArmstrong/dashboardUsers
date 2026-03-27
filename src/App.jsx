@@ -72,6 +72,26 @@ function App() {
     getProducts();
   }, [])
 
+  // const columnsProducts = [
+  //   { header: "Title", accessor: "title" },
+  //   { header: "Category", accessor: "category" },
+  //   { header: "Price", accessor: "price" },
+  //   { header: "Stock", accessor: "stock" }
+  // ]
+
+  // const columnsUsers = [
+  //   {header: "Name", accessor: "firstName"},
+  //   {header: "Lastname", accessor: "lastName"},
+  //   {header: "Age", accessor: "age"},
+  //   {header: "Email", accessor: "email"}
+  // ]
+
+  // const columnsPost = [
+  //   {header: "Title", accessor: "title"},
+  //   {header: "Body", accessor: "body"},
+  //   {header: "Views", accessor: "views"}
+  // ]
+
   // console.log(chartData);
 
   return (
