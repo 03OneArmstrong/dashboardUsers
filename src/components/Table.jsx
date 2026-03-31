@@ -1,23 +1,54 @@
 import { EyeIcon, TrashIcon, ArrowRightCircleIcon, ArrowLeftCircleIcon } from "@heroicons/react/16/solid"
 import { useState } from "react"
 
-function Table({ products }) {
+function Table({ data }) {
 
     const [inputFiltro, setInputFiltro] = useState('')
     const [filtroEstado, setFiltroEstado] = useState('null')
+    const [filtroPuesto, setFiltroPuesto] = useState('products')
 
-    const filtro = products.filter((obj) => {
-        const valorCoincide =
-            obj.title?.toLowerCase().includes(inputFiltro.toLowerCase()) ||
-            obj.category?.toLowerCase().includes(inputFiltro.toLowerCase()) ||
-            obj?.price.toString().includes(inputFiltro) ||
-            obj?.stock.toString().includes(inputFiltro)
+    const arr = Object.values(data);
+    let filtrarArea = []
+    let registros = []
+    arr.forEach((obj) => {
+        if (obj.value === filtroPuesto) {
+            filtrarArea = obj.columns
+            registros = obj.rows
+        }
+    })
+    console.log(registros);
 
-        const coincideCategoria = filtroEstado === 'null' 
-        ? true
-        : obj.category === filtroEstado    
+    const filtro = registros.filter((obj) => {
+        if (filtroPuesto === 'products') {
+            const valorCoincide =
+                obj.title?.toLowerCase().includes(inputFiltro.toLowerCase()) ||
+                obj.category?.toLowerCase().includes(inputFiltro.toLowerCase()) ||
+                obj?.price.toString().includes(inputFiltro) ||
+                obj?.stock.toString().includes(inputFiltro)
 
-        return valorCoincide && coincideCategoria
+            const coincideCategoria = filtroEstado === 'null'
+                ? true
+                : obj.category === filtroEstado
+
+            return valorCoincide && coincideCategoria
+        }
+        if (filtroPuesto === 'users') {
+            const valorCoincide =
+                obj.firstName?.toLowerCase().includes(inputFiltro.toLowerCase()) ||
+                obj.lastname?.toLowerCase().includes(inputFiltro.toLowerCase()) ||
+                obj.email?.toLowerCase().includes(inputFiltro.toLowerCase()) ||
+                obj.age?.toString().includes(inputFiltro)
+
+            return valorCoincide
+        }
+
+        if (filtroPuesto === 'posts') {
+            const valorCoincide =
+                obj.title?.toLowerCase().includes(inputFiltro.toLowerCase()) ||
+                obj.body?.toLowerCase().includes(inputFiltro.toLowerCase()) ||
+                obj.views?.toString().includes(inputFiltro)
+            return valorCoincide
+        }
     })
 
     const [paginaActual, setPaginaActual] = useState(1);
@@ -29,7 +60,7 @@ function Table({ products }) {
 
     const handleBuscar = (e) => {
         const input = e.target.value;
-        const result = input.replace(/[^a-zA-Záéíóú123456789]/g, '')
+        const result = input.replace(/[^a-zA-Záéíóú1234567890.]/g, '')
         setInputFiltro(result)
     }
 
@@ -44,10 +75,11 @@ function Table({ products }) {
                         type="text" placeholder='Search' />
                 </div>
                 <div>
-                    <select 
-                    value={filtroEstado}
-                    onChange={(e) => setFiltroEstado(e.target.value)}
-                    className='border border-black bg-[#780000] text-white p-2 rounded-2xl text-center w-40'>
+                    <select
+                        disabled={filtroPuesto !== 'products'}
+                        value={filtroEstado}
+                        onChange={(e) => setFiltroEstado(e.target.value)}
+                        className={`border border-black text-white p-2 rounded-2xl text-center w-40 ${filtroPuesto === 'products' ? 'bg-[#780000]' : 'bg-[#495057]'}`}>
                         <option value="null">All</option>
                         <option value="beauty">Beauty</option>
                         <option value="fragrances">Fragrances</option>
@@ -55,28 +87,54 @@ function Table({ products }) {
                         <option value="groceries">Groceries</option>
                     </select>
                 </div>
+
+                <div>
+                    <select
+                        value={filtroPuesto}
+                        onChange={(e) => setFiltroPuesto(e.target.value)}
+                        className="border bg-[#a2d2ff] p-2 rounded-full text-center w-40"
+                    >
+                        <option value='products'>Products</option>
+                        <option value='users'>Users</option>
+                        <option value='posts'>Posts</option>
+                    </select>
+                </div>
+
             </div>
             <div>
                 <table className='mt-4 w-full'>
                     <thead className='bg-[#588157] border-2 border-black'>
-                        <tr className=''>
-                            <th className='p-3 border border-black text-white font-medium text-center'>Title</th>
-                            <th className='p-3 border border-black text-white font-medium text-center'>Category</th>
-                            <th className='p-3 border border-black text-white font-medium text-center'>Price</th>
-                            <th className='p-3 border border-black text-white font-medium text-center'>Stock</th>
+                        <tr>
+                            {filtrarArea.map((col, index) => (
+                                <th key={index}
+                                    className="p-3 border border-black text-white font-medium text-center"
+                                >
+                                    {col.header}
+                                </th>
+                            ))}
                             <th className='p-3 border border-black text-white font-medium text-center'>Actions</th>
                         </tr>
+
                     </thead>
                     {registrosMostrados.length > 0 && (
                         <tbody className='border'>
-                            {registrosMostrados.map((obj) => (
-                                <tr key={obj.id}
+                            {registrosMostrados.map((obj, index) => (
+                                <tr key={index}
                                     className='border-2 border-black'
                                 >
-                                    <td className='text-center p-3 bg-[#edede9] text-black border'>{obj.title}</td>
-                                    <td className='text-center p-3 bg-[#edede9] text-black border'>{obj.category}</td>
-                                    <td className='text-center p-3 bg-[#edede9] text-black border'>{obj.price}</td>
-                                    <td className='text-center p-3 bg-[#edede9] text-black border'>{obj.stock}</td>
+                                    {filtrarArea.map((col, index) => {
+                                        const value = col.accessor.includes('.')
+                                            ? col.accessor.split('.').reduce((acc, key) => acc?.[key], obj)
+                                            : obj[col.accessor]
+                                        return (
+                                            <td
+                                                className="text-center p-3 bg-[#edede9] text-black border"
+                                                key={index}>
+                                                {value}
+                                            </td>
+                                        )
+                                    })}
+
                                     <td className='text-center p-3 bg-[#edede9] text-black border'>
                                         <div className="flex justify-center items-center gap-4">
                                             <EyeIcon className="w-9 h-9 p-1 text-[#6f1d1b] rounded-full cursor-pointer hover:bg-[#432818] hover:text-[#ffe6a7] duration-300" />

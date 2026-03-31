@@ -72,27 +72,38 @@ function App() {
     getProducts();
   }, [])
 
-  // const columnsProducts = [
-  //   { header: "Title", accessor: "title" },
-  //   { header: "Category", accessor: "category" },
-  //   { header: "Price", accessor: "price" },
-  //   { header: "Stock", accessor: "stock" }
-  // ]
-
-  // const columnsUsers = [
-  //   {header: "Name", accessor: "firstName"},
-  //   {header: "Lastname", accessor: "lastName"},
-  //   {header: "Age", accessor: "age"},
-  //   {header: "Email", accessor: "email"}
-  // ]
-
-  // const columnsPost = [
-  //   {header: "Title", accessor: "title"},
-  //   {header: "Body", accessor: "body"},
-  //   {header: "Views", accessor: "views"}
-  // ]
-
-  // console.log(chartData);
+  const data = {
+    item1: {
+      value: "products",
+      columns: [
+        { header: "Title", accessor: "title" },
+        { header: "Category", accessor: "category" },
+        { header: "Price", accessor: "price" },
+        { header: "Stock", accessor: "stock" }
+      ],
+      rows: products
+    },
+    item2: {
+      value: "users",
+      columns: [
+        { header: "Name", accessor: "firstName" },
+        { header: "Lastname", accessor: "lastName" },
+        { header: "Age", accessor: "age" },
+        { header: "City", accessor: 'address.city' },
+        { header: "Email", accessor: "email" }
+      ],
+      rows: users
+    },
+    item3: {
+      value: "posts",
+      columns: [
+        { header: "Title", accessor: "title" },
+        { header: "Body", accessor: "body" },
+        { header: "Views", accessor: "views" }
+      ],
+      rows: posts
+    },
+  }
 
   return (
     <>
@@ -119,7 +130,7 @@ function App() {
                 }
               >
               </Route>
-              <Route path='/table' element={<Table products={products} />}></Route>
+              <Route path='/table' element={<Table  data={data} />}></Route>
             </Routes>
           </div>
           <Footer />
