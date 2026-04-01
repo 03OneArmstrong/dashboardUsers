@@ -74,6 +74,7 @@ function Table({ data }) {
                         className='border border-black text-center rounded-xl bg-[#31572c] p-2 text-white'
                         type="text" placeholder='Search' />
                 </div>
+
                 <div>
                     <select
                         disabled={filtroPuesto !== 'products'}
@@ -98,6 +99,17 @@ function Table({ data }) {
                         <option value='users'>Users</option>
                         <option value='posts'>Posts</option>
                     </select>
+                </div>
+
+                <div className="p-3 grid grid-cols-2 gap-2">
+                    <select className="border border-black p-2 bg-[#3e5c76] text-white rounded-full w-36 text-center">
+                        <option value='products'>Products</option>
+                        <option value='users'>Users</option>
+                        <option value='posts'>Posts</option>
+                    </select>
+                    <button
+                    className="bg-[#5a189a] p-2 rounded-full cursor-pointer text-white hover:bg-[#240046] duration-300"
+                    >Generar PDF</button>
                 </div>
 
             </div>
