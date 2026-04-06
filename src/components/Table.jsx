@@ -1,11 +1,13 @@
 import { EyeIcon, TrashIcon, ArrowRightCircleIcon, ArrowLeftCircleIcon } from "@heroicons/react/16/solid"
 import { useState } from "react"
+import GenerarPDF from "./GenerarPDF"
 
 function Table({ data }) {
 
     const [inputFiltro, setInputFiltro] = useState('')
     const [filtroEstado, setFiltroEstado] = useState('null')
     const [filtroPuesto, setFiltroPuesto] = useState('products')
+    const [filtroPDF, setFiltroPDF] = useState('products')
 
     const arr = Object.values(data);
     let filtrarArea = []
@@ -16,6 +18,14 @@ function Table({ data }) {
             registros = obj.rows
         }
     })
+
+    let registroPDF = []
+    arr.forEach((obj) => {
+        if (obj.value === filtroPDF) {
+            registroPDF = obj.rows
+        }
+    })
+
     console.log(registros);
 
     const filtro = registros.filter((obj) => {
@@ -102,13 +112,17 @@ function Table({ data }) {
                 </div>
 
                 <div className="p-3 grid grid-cols-2 gap-2">
-                    <select className="border border-black p-2 bg-[#3e5c76] text-white rounded-full w-36 text-center">
+                    <select
+                        onChange={(e) => setFiltroPDF(e.target.value)}
+                        value={filtroPDF}
+                        className="border border-black p-2 bg-[#3e5c76] text-white rounded-full w-36 text-center">
                         <option value='products'>Products</option>
                         <option value='users'>Users</option>
                         <option value='posts'>Posts</option>
                     </select>
                     <button
-                    className="bg-[#5a189a] p-2 rounded-full cursor-pointer text-white hover:bg-[#240046] duration-300"
+                        onClick={() => GenerarPDF(registroPDF, filtroPDF)}
+                        className="bg-[#5a189a] p-2 rounded-full cursor-pointer text-white hover:bg-[#240046] duration-300"
                     >Generar PDF</button>
                 </div>
 
