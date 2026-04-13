@@ -202,7 +202,7 @@ function Table({ data }) {
             </div>
             {
                 objetoMostrar && mostrarModal && (
-                    <Modal objetoMostrar={objetoMostrar} filtrarArea={filtrarArea} onClose={() => setMostrarModal(false)} />
+                    <Modal objetoMostrar={objetoMostrar} filtroPuesto={filtroPuesto} onClose={() => setMostrarModal(false)} />
                 )}
         </>
     )

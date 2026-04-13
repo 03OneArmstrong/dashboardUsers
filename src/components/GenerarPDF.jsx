@@ -8,13 +8,14 @@ function GenerarPDF(arreglo, lugar) {
     const objetos = {
         item1: {
             area: 'products',
-            head: ["Title", "Category", "Price", "Stock", "Warranty Information", "Description"],
+            head: ["Title", "Category", "Price", "Stock","Brand", "Warranty Information", "Description"],
             body: () => {
                 return arreglo.map((obj) => (
                     [obj.title,
                     obj.category,
                     obj.price,
                     obj.stock,
+                    obj.brand,
                     obj.warrantyInformation,
                     obj.description
                     ]
@@ -22,12 +23,13 @@ function GenerarPDF(arreglo, lugar) {
             }
         },
         item2: {
-            area: "users", head: ["Firstname", "Lastname", "Age", "Gender", "City", "Email"], body: () => {
+            area: "users", head: ["Firstname", "Lastname", "Age", "Gender", "Birthday", "City", "Email"], body: () => {
                 return arreglo.map((obj) => (
                     [obj.firstName,
                     obj.lastName,
                     obj.age,
                     obj.gender,
+                    obj.birthDate,
                     obj.address.city,
                     obj.email
                     ]

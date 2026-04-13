@@ -1,42 +1,41 @@
 import React from 'react'
 
-function Modal({ objetoMostrar, filtrarArea, onClose }) {
+const configModal = {
+    products: [
+        { header: "Title", accessor: "title" },
+        { header: "Category", accessor: "category" },
+        { header: "Price", accessor: "price" },
+        { header: "Stock", accessor: "stock" },
+        { header: "Brand", accessor: "brand" },
+        { header: "Warranty Information", accessor: "warrantyInformation" },
+        { header: "Description", accessor: "description" },
+    ], users: [
+        { header: "FirstName", accessor: "firstName" },
+        { header: "LastName", accessor: "lastName" },
+        { header: "Age", accessor: "age" },
+        { header: "Gender", accessor: "gender" },
+        { header: "BirthDate", accessor: "birthDate" },
+        { header: "City", accessor: "address.city" },
+        { header: "Email", accessor: "email" },
+    ], posts: [
+        { header: "Title", accessor: "title" },
+        { header: "Views", accessor: "views" },
+        { header: "Likes", accessor: "reactions.likes" },
+        { header: "Dislikes", accessor: "reactions.dislikes" },
+        { header: "Body", accessor: "body" },
+    ],
+}
+function Modal({ objetoMostrar, filtroPuesto, onClose }) {
 
-    /*     let capsula = null
-    
-        const objetos = {
-            item1: {
-                area: 'products',
-                head: ["Title", "Category", "Price", "Stock", "Warranty Information", "Description"]
-    
-            },
-            item2: {
-                area: "users", head: ["Firstname", "Lastname", "Age", "Gender", "City", "Email"],
-            },
-            item3: {
-                area: "posts", head: ["Title", "Views", "Likes", "Dislikes", "Body"]
-            },
-        }
-    
-        const val = Object.values(objetos)
-        val.forEach((obj) => {
-            if (obj.area === filtroPuesto) {
-                capsula = obj
-            }
-        })
-    
-        if (!capsula) return;
-    
-        const datos = capsula.body();
-     */
+    const columnas = configModal[filtroPuesto]
 
-    if (!objetoMostrar || !filtrarArea) return null
+    if (!objetoMostrar || !columnas) return null
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center p-20">
             <div className='bg-[#e1dcd3] p-5 rounded-2xl'>
                 <div className='flex flex-col gap-3'>
-                    {filtrarArea.map((col, index) => {
+                    {columnas.map((col, index) => {
                         const value = col.accessor.includes('.')
                             ? col.accessor.split('.').reduce((acc, key) => acc?.[key], objetoMostrar)
                             : objetoMostrar[col.accessor]
